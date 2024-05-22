@@ -46,7 +46,7 @@ while run:
             birdHeld = False
             print("Mouse Released")
             BirdFlying=True
-            startTime=time.get_time()
+            startTime=pygame.time.get_ticks() / 1000
             u=velocity_finder(x)
             print("u", u,"angle", angle)
 
@@ -56,7 +56,7 @@ while run:
         angle=np.arctan(currentcords[1]-originalcords[1]/currentcords[0]-originalcords[0])       #edit it so that it outputs negative 
         print("New Cords distance: ",x)
     if BirdFlying:
-        t=time.get_time()-startTime
+        t=(pygame.time.get_ticks() / 1000)-startTime
         currentcords[0]=xcord(u,angle,t)
         currentcords[1]=ycord(u,angle,t)
 
