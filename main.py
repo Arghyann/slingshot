@@ -6,7 +6,10 @@ cair=2
 mass=4
 c=cair/mass
 g=9.8/mass
-
+k=2
+elastic_constant=np.sqrt(k/mass)
+def velocity_finder(x):
+    return elastic_constant*x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
     return (u * np.cos(s) / c) * (1 - np.exp(-c * t))
 def ycord(u,s,t):
