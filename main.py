@@ -15,11 +15,11 @@ angle=0
 def velocity_finder(xi):
     return elastic_constant*xi       #how much you pull it back->x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
-    return originalcords[0]+(u * np.cos(s) / c) * (1 - np.exp(-c * t))
+    return originalcords[0]+(u * (np.cos(s)) / c) * (1 - np.exp(-c * t))
 def ycord(u,s,t):
-    term1 = u * np.sin(s) + g / c
-    term2 = (u * np.sin(s) + g / c) * np.exp(-c * t)
-    return originalcords[1]-(term1 - term2) / c - g * t / c
+    term1 = u * (np.sin(s)) + g / c
+    term2 = (u * (np.sin(s)) + g / c) * np.exp(-c * t)
+    return originalcords[1]-((term1 - term2) / c) - g * t / c
 screen = pygame.display.set_mode((800,600))
 
 #bird co-ordinates
@@ -44,11 +44,11 @@ while run:
 
         if event.type == pygame.MOUSEBUTTONUP:
             birdHeld = False
-
             print("Mouse Released")
             BirdFlying=True
             startTime=time.get_time()
             u=velocity_finder(x)
+            print("u", u,"angle", angle)
 
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
@@ -59,8 +59,7 @@ while run:
         t=time.get_time()-startTime
         currentcords[0]=xcord(u,angle,t)
         currentcords[1]=ycord(u,angle,t)
-    if u==0 and currentcords[1]<400:
-        BirdFlying=False
+
     #background
     screen.fill((255,255,255))
 
