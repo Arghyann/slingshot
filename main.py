@@ -11,11 +11,11 @@ elastic_constant=np.sqrt(k/mass)
 def velocity_finder(x):
     return elastic_constant*x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
-    return (u * np.cos(s) / c) * (1 - np.exp(-c * t))
+    return originalcords[0]+(u * np.cos(s) / c) * (1 - np.exp(-c * t))
 def ycord(u,s,t):
     term1 = u * np.sin(s) + g / c
     term2 = (u * np.sin(s) + g / c) * np.exp(-c * t)
-    return (term1 - term2) / c - g * t / c
+    return originalcords[1]-(term1 - term2) / c - g * t / c
 screen = pygame.display.set_mode((800,600))
 
 #bird co-ordinates
