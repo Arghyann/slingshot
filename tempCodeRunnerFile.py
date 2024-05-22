@@ -1,1 +1,1 @@
-"New Cords distance: ",x
+currentcords=np.array([111,323])

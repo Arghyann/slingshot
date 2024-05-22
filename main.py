@@ -59,7 +59,8 @@ while run:
         t=time.get_time()-startTime
         currentcords[0]=xcord(u,angle,t)
         currentcords[1]=ycord(u,angle,t)
-
+    if u==0 and currentcords[1]<400:
+        BirdFlying=False
     #background
     screen.fill((255,255,255))
 
