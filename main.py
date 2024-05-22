@@ -53,7 +53,7 @@ while run:
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
         x=np.linalg.norm(currentcords-originalcords)         #displays x
-        angle=np.arctan(currentcords[1]-originalcords[1]/currentcords[0]-originalcords[0])       #edit it so that it outputs negative 
+        angle=np.arctan2(currentcords[1]-originalcords[1]/currentcords[0]-originalcords[0])       #edit it so that it outputs negative 
         print("New Cords distance: ",x)
     if BirdFlying:
         t=(pygame.time.get_ticks() / 1000)-startTime
