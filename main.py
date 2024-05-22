@@ -45,6 +45,7 @@ while run:
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
         x=np.linalg.norm(currentcords-originalcords)         #displays x
+        theta=np.arctan(currentcords[1]/currentcords[0])
         print("New Cords distance: ",x)
         
     #background
