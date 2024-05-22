@@ -2,14 +2,18 @@
 import pygame
 import numpy as np
 pygame.init()
-cair=2
+time=pygame.time.Clock()
+cair=2                   
 mass=4
 c=cair/mass
 g=9.8/mass
 k=2
+x=-1              #distance pulled
 elastic_constant=np.sqrt(k/mass)
-def velocity_finder(x):
-    return elastic_constant*x
+u=0
+angle=0
+def velocity_finder(xi):
+    return elastic_constant*xi       #how much you pull it back->x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
     return originalcords[0]+(u * np.cos(s) / c) * (1 - np.exp(-c * t))
 def ycord(u,s,t):
@@ -23,7 +27,7 @@ originalcords=np.array([111,323])
 currentcords=np.array([111,323])
 birdRadius = 15
 birdHeld = False
-
+BirdFlying=False
 run = True
 while run:
     for event in pygame.event.get():
@@ -40,14 +44,22 @@ while run:
 
         if event.type == pygame.MOUSEBUTTONUP:
             birdHeld = False
+
             print("Mouse Released")
-    
+            BirdFlying=True
+            startTime=time.get_time()
+            u=velocity_finder(x)
+
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
         x=np.linalg.norm(currentcords-originalcords)         #displays x
-        theta=np.arctan(currentcords[1]/currentcords[0])
+        angle=np.arctan(currentcords[1]/currentcords[0])
         print("New Cords distance: ",x)
-        
+    if BirdFlying:
+        t=time.get_time()-startTime
+        currentcords[0]=xcord(u,angle,t)
+        currentcords[1]=ycord(u,angle,t)
+
     #background
     screen.fill((255,255,255))
 

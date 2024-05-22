@@ -1,0 +1,1 @@
+"New Cords distance: ",x
