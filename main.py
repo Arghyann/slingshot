@@ -1,4 +1,5 @@
 #angry birds game
+import sys
 import pygame
 import numpy as np
 pygame.init()
@@ -56,7 +57,7 @@ while run:
             BirdFlying=True
             startTime=pygame.time.get_ticks() / 1000
             u=velocity_finder(x)
-            print("u", u,"angle", angle)
+            print("u", u,"angle", np.degrees(angle))
 
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
@@ -73,7 +74,7 @@ while run:
             
     
         
-    if (currentcords[0] + birdRadius >= 800  ) and BirdFlying:        # When it flies out of the frame
+    if (currentcords[0] + birdRadius >= 800) and BirdFlying:        # When it flies out of the frame
         print("updated u and angle after collision")
         print("current cords here", currentcords)
           # Elasticity is 1
@@ -87,17 +88,24 @@ while run:
         
        
         startTime=pygame.time.get_ticks() /1000
+
+
+
     if currentcords[1]+birdRadius>=400 and BirdFlying:
-        print("updated u and angle after collision")
         print("current cords here", currentcords)
           # Elasticity is 1
         previous_time = t - 0.05
         
         prevx, prevy = xcord(u, angle, previous_time), ycord(u, angle, previous_time)
-        angle = (np.pi/2-np.arctan2(currentcords[0]-prevx,currentcords[1]-prevy))
-        u=(np.sqrt((currentcords[0] - prevx)**2 + (currentcords[1] - prevy)**2)/0.05)
+        angle = (np.pi/2+np.arctan2(currentcords[0]-prevx,currentcords[1]-prevy))
+        ux = u*np.sin(angle)
+        uy=-(np.sqrt((currentcords[0] - prevx)**2 + (currentcords[1] - prevy)**2)/0.05)*np.cos(angle)
+        u=np.sqrt(ux**2+uy**2)
         originalcords=currentcords.copy()
+        print("updated u and angle after collision")
+        print("u=",u,"angle=",np.degrees(angle))
         startTime=pygame.time.get_ticks() /1000
+        #sys.exit()
     screen.fill((255,255,255))
 
     #grass
