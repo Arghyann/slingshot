@@ -3,15 +3,16 @@ import pygame
 import numpy as np
 pygame.init()
 time=pygame.time.Clock()
-cair=2                   
-mass=4
+cair=1.5                
+mass=40
 c=cair/mass
-g=9.8/mass
+g=-9.8/mass  #because of the stupid coordinate system in pygame (why would you let origin be the top left corner)
 k=2
 x=1              #distance pulled
 elastic_constant=np.sqrt(k/mass)
 u=0
 angle=0
+time_factor=5 #to speed up the simulation
 def velocity_finder(xi):
     return elastic_constant*xi       #how much you pull it back->x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
@@ -53,13 +54,14 @@ while run:
     if birdHeld:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
         x=np.linalg.norm(currentcords-originalcords)         #displays x
-        angle = np.arctan2(originalcords[1] - currentcords[1], originalcords[0] - currentcords[0])       #edit it so that it outputs negative 
+        angle = -(np.arctan2(originalcords[1] - currentcords[1], originalcords[0] - currentcords[0]))       #edit it so that it outputs negative 
         print("New Cords distance: ",x)
     if BirdFlying:
-        t=(pygame.time.get_ticks() / 1000)-startTime
+        t=((pygame.time.get_ticks()/ 1000)-startTime)*time_factor
         currentcords[0]=xcord(u,angle,t)
         currentcords[1]=ycord(u,angle,t)
-
+    if(currentcords[1]+birdRadius>=400):
+        BirdFlying=False
     #background
     screen.fill((255,255,255))
 
