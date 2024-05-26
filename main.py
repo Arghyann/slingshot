@@ -8,14 +8,13 @@ elasticity=1
 cair=2              
 mass=40
 c=cair/mass
-g=-9.8/mass  #because of the stupid coordinate system in pygame (why would you let origin be the top left corner)
+g=-15/mass  #because of the stupid coordinate system in pygame (why would you let origin be the top left corner)
 k=2
 x=1              #distance pulled
 elastic_constant=np.sqrt(k/mass)
 u=0
 angle=0
-collision=False
-collision_time=None
+
 t=0
 time_factor=20 #to speed up the simulation
 def velocity_finder(xi):
@@ -54,10 +53,11 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if currentcords[0] - birdRadius <= pygame.mouse.get_pos()[0] <= currentcords[0]+birdRadius and currentcords[1]-birdRadius <= pygame.mouse.get_pos()[1] <= currentcords[1]+birdRadius:
                 birdHeld = True
-                print("Mouse Clicked")
+                
 
         if event.type == pygame.MOUSEBUTTONUP:
             birdHeld = False
+            currentcords=originalcords.copy()  #updates before birdflying is updated DO NOT CHANGE
             print("Mouse Released")
             BirdFlying=True
             startTime=pygame.time.get_ticks() / 1000
@@ -68,8 +68,8 @@ while run:
         currentcords[0], currentcords[1] = pygame.mouse.get_pos()
         x=np.linalg.norm(currentcords-originalcords)         #displays x
         angle = -(np.arctan2(originalcords[1] - currentcords[1], originalcords[0] - currentcords[0]))       #edit it so that it outputs negative 
-        print("New Cords distance: ",x)
-    if currentcords[0] + birdRadius <= 800 and BirdFlying:       
+        print("bird held:", birdHeld)
+    if currentcords[0] + birdRadius <= 800 and currentcords[1]+birdRadius<=400 and BirdFlying:       
         t = ((pygame.time.get_ticks() / 1000) - startTime) * time_factor
         currentcords[0] = xcord(u, angle, t)
         currentcords[1] = ycord(u, angle, t)
@@ -99,9 +99,9 @@ while run:
         print("current cords here", currentcords)
         newvx=vx(u,angle,t)
         newvy=-vy(u,angle,t)
-        u=np.linalg.norm([newvy,newvx])
-        angle=-np.arctan2(newvy,newvx)
-        currentcords[1]=400-birdRadius
+        u=50*(np.linalg.norm([newvy,newvx]))
+        angle=-np.arctan(newvy/newvx)
+        currentcords[1]=400-birdRadius-1
         originalcords=currentcords.copy()
         print("updated u and angle after collision")
         print("u=",u,"angle=",np.degrees(angle))
