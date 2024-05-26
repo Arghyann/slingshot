@@ -4,7 +4,6 @@ import pygame
 import numpy as np
 pygame.init()
 time=pygame.time.Clock()
-elasticity=1
 cair=2              
 mass=40
 c=cair/mass
@@ -29,11 +28,7 @@ def ycord(u,s,t):
     term2 = (u * (np.sin(s)) + g / c) * np.exp(-c * t)
     
     return originalcords[1]-((term1 - term2) / c) - g * t / c
-def vx(u,s,t):
-    return u*np.exp(-c*t)
-def vy(u,s,t):
-    term=u*c+g
-    return (term*np.exp(-c*t) - g)*c
+    
 screen = pygame.display.set_mode((800,600))
 
 #bird co-ordinates
@@ -69,7 +64,10 @@ while run:
         x=np.linalg.norm(currentcords-originalcords)         #displays x
         angle = -(np.arctan2(originalcords[1] - currentcords[1], originalcords[0] - currentcords[0]))       #edit it so that it outputs negative 
         print("New Cords distance: ",x)
-    if currentcords[0] + birdRadius <= 800 and BirdFlying:       
+
+    
+    #Motion before collision
+    if (currentcords[0] + birdRadius <= 800) and (currentcords[1] + birdRadius <= 400) and BirdFlying:       
         t = ((pygame.time.get_ticks() / 1000) - startTime) * time_factor
         currentcords[0] = xcord(u, angle, t)
         currentcords[1] = ycord(u, angle, t)
@@ -83,25 +81,29 @@ while run:
         print("updated u and angle after collision")
         print("current cords here", currentcords)
           # Elasticity is 1
-        newvx=-vx(u,angle,t)
-        newvy=-vy(u,angle,t)
-        u=-elasticity*np.linalg.norm([newvx,newvy])
-        angle=np.arctan2(newvy,newvx)
-
-        originalcords=[800-birdRadius,currentcords[1]]
-        currentcords=originalcords.copy()
+        previous_time = t - 0.05
+        
+        prevx, prevy = xcord(u, angle, previous_time), ycord(u, angle, previous_time)
+        angle = -np.arctan2(-(currentcords[1] - prevy), currentcords[0] - prevx)
+        u=-(np.sqrt((currentcords[0] - prevx)**2 + (currentcords[1] - prevy)**2)/0.05)
+        originalcords=currentcords.copy()
+        
         
        
         startTime=pygame.time.get_ticks() /1000
 
-    
+
+
     if currentcords[1]+birdRadius>=400 and BirdFlying:
         print("current cords here", currentcords)
-        newvx=vx(u,angle,t)
-        newvy=-vy(u,angle,t)
-        u=np.linalg.norm([newvy,newvx])
-        angle=-np.arctan2(newvy,newvx)
-        currentcords[1]=400-birdRadius
+          # Elasticity is 1
+        previous_time = t - 0.05
+        
+        prevx, prevy = xcord(u, angle, previous_time), ycord(u, angle, previous_time)
+        angle = (np.pi/2+np.arctan2(currentcords[0]-prevx,currentcords[1]-prevy))
+        ux = u*np.sin(angle)
+        uy=-(np.sqrt((currentcords[0] - prevx)**2 + (currentcords[1] - prevy)**2)/0.05)*np.cos(angle)
+        u=np.sqrt(ux**2+uy**2)
         originalcords=currentcords.copy()
         print("updated u and angle after collision")
         print("u=",u,"angle=",np.degrees(angle))
