@@ -1,5 +1,5 @@
-import pygame
 import sys
+import pygame
 from background import Background
 from bird import Bird
 
