@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 
 class Bird:
-    def __init__(self, screen, mass, elasticity, cair, g, k):
+    def __init__(self, screen, mass=40, elasticity=1, cair=2, g=-15, k=2):
         self.screen = screen
         self.mass = mass
         self.elasticity = elasticity
