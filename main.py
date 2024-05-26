@@ -28,7 +28,11 @@ def ycord(u,s,t):
     term2 = (u * (np.sin(s)) + g / c) * np.exp(-c * t)
     
     return originalcords[1]-((term1 - term2) / c) - g * t / c
-    
+def vx(u,s,t):
+    return u*np.exp(-c*t)
+def vy(u,s,t):
+    term=u*c+g
+    return (term*np.exp(-c*t) - g)*c
 screen = pygame.display.set_mode((800,600))
 
 #bird co-ordinates
@@ -78,11 +82,11 @@ while run:
         print("updated u and angle after collision")
         print("current cords here", currentcords)
           # Elasticity is 1
-        previous_time = t - 0.05
+        newvx=-vx(u,angle,t)
+        newvy=-vy(u,angle,t)
+        u=-np.linalg.norm([newvx,newvy])
+        angle=np.arctan2(newvy,newvx)
         
-        prevx, prevy = xcord(u, angle, previous_time), ycord(u, angle, previous_time)
-        angle = -np.arctan2(-(currentcords[1] - prevy), currentcords[0] - prevx)
-        u=-(np.sqrt((currentcords[0] - prevx)**2 + (currentcords[1] - prevy)**2)/0.05)
         originalcords=currentcords.copy()
         
         
