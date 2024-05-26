@@ -4,7 +4,7 @@ import pygame
 import numpy as np
 pygame.init()
 time=pygame.time.Clock()
-elasticity=1
+elasticity=0.5
 cair=2              
 mass=40
 c=cair/mass
@@ -84,7 +84,7 @@ while run:
         print("current cords here", currentcords)
           # Elasticity is 1
         newvx=-vx(u,angle,t)
-        newvy=-vy(u,angle,t)
+        newvy=-vy(-u,angle,t)
         u=-elasticity*np.linalg.norm([newvx,newvy])
         angle=np.arctan2(newvy,newvx)
 
@@ -94,19 +94,9 @@ while run:
        
         startTime=pygame.time.get_ticks() /1000
 
+    if currentcords[1]+birdRadius>+400:
+        BirdFlying=False
     
-    if currentcords[1]+birdRadius>=400 and BirdFlying:
-        print("current cords here", currentcords)
-        newvx=vx(u,angle,t)
-        newvy=-vy(u,angle,t)
-        u=50*(np.linalg.norm([newvy,newvx]))
-        angle=-np.arctan(newvy/newvx)
-        currentcords[1]=400-birdRadius-1
-        originalcords=currentcords.copy()
-        print("updated u and angle after collision")
-        print("u=",u,"angle=",np.degrees(angle))
-        startTime=pygame.time.get_ticks() /1000
-        #sys.exit()
     screen.fill((255,255,255))
 
     #grass
