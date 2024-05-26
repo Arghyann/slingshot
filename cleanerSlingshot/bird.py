@@ -26,13 +26,9 @@ class Bird:
         return self.elastic_constant * x
 
     def xcord(self, u, s, t):
-        max_t = 10  # Maximum time to prevent overflow
-        t = min(t, max_t)
         return self.original_coords[0] + (u * np.cos(s) / self.c) * (1 - np.exp(-self.c * t))
 
     def ycord(self, u, s, t):
-        max_t = 10  # Maximum time to prevent overflow
-        t = min(t, max_t)
         term1 = u * np.sin(s) + self.g / self.c
         term2 = (u * np.sin(s) + self.g / self.c) * np.exp(-self.c * t)
         return self.original_coords[1] - ((term1 - term2) / self.c) - self.g * t / self.c
@@ -62,14 +58,14 @@ class Bird:
             self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
 
         if self.bird_flying:
-            t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
+            current_time = pygame.time.get_ticks() / 1000
+            t = (current_time - self.start_time) * self.time_factor
             self.current_coords[0] = self.xcord(self.u, self.angle, t)
             self.current_coords[1] = self.ycord(self.u, self.angle, t)
 
-            if self.current_coords[0] + self.bird_radius >= 800:
-                self.handle_collision(horizontal=True)
-            if self.current_coords[1] + self.bird_radius >= 400:
-                self.handle_collision(horizontal=False)
+            if self.current_coords[0] + self.bird_radius >= 800 or self.current_coords[1] + self.bird_radius >= 400:
+                self.handle_collision(horizontal=self.current_coords[0] + self.bird_radius >= 800)
+                self.start_time = current_time
 
     def handle_collision(self, horizontal):
         t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
