@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 
 class Bird:
-    def __init__(self, screen, mass=40, elasticity=1, cair=2, g=-15, k=2):
+    def __init__(self, screen, mass, elasticity, cair, g, k):
         self.screen = screen
         self.mass = mass
         self.elasticity = elasticity
@@ -26,9 +26,15 @@ class Bird:
         return self.elastic_constant * x
 
     def xcord(self, u, s, t):
+        # Limit the value of t to avoid overflow issues
+        max_t = 1000 / self.time_factor
+        t = min(t, max_t)
         return self.original_coords[0] + (u * np.cos(s) / self.c) * (1 - np.exp(-self.c * t))
 
     def ycord(self, u, s, t):
+        # Limit the value of t to avoid overflow issues
+        max_t = 1000 / self.time_factor
+        t = min(t, max_t)
         term1 = u * np.sin(s) + self.g / self.c
         term2 = (u * np.sin(s) + self.g / self.c) * np.exp(-self.c * t)
         return self.original_coords[1] - ((term1 - term2) / self.c) - self.g * t / self.c
@@ -68,7 +74,6 @@ class Bird:
                 self.handle_collision(horizontal=False)
 
     def handle_collision(self, horizontal):
-        t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
         if horizontal:
             new_vx = -self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
