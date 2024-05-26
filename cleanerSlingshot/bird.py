@@ -93,7 +93,7 @@ class Bird:
     def draw_projection(self):
         if self.bird_held:
             points = []
-            for i in range(1, 101):
+            for i in range(1,500):
                 t = i * 0.1  # Incremental time for projection
                 x = self.xcord(self.u, self.angle, t)
                 y = self.ycord(self.u, self.angle, t)
