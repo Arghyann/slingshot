@@ -64,7 +64,10 @@ while run:
         x=np.linalg.norm(currentcords-originalcords)         #displays x
         angle = -(np.arctan2(originalcords[1] - currentcords[1], originalcords[0] - currentcords[0]))       #edit it so that it outputs negative 
         print("New Cords distance: ",x)
-    if currentcords[0] + birdRadius <= 800 and BirdFlying:       
+
+    
+    #Motion before collision
+    if (currentcords[0] + birdRadius <= 800) and (currentcords[1] + birdRadius <= 400) and BirdFlying:       
         t = ((pygame.time.get_ticks() / 1000) - startTime) * time_factor
         currentcords[0] = xcord(u, angle, t)
         currentcords[1] = ycord(u, angle, t)
