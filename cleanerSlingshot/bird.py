@@ -41,20 +41,19 @@ class Bird:
         return u * np.cos(s) * np.exp(-self.c * t)
 
     def vy(self, u, s, t):
-        term = u * np.sin(s) * np.exp(-self.c * t) + self.g * t
-        return term
+        return u * np.sin(s) * np.exp(-self.c * t) - self.g * t
 
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.current_coords[0] - self.bird_radius <= pygame.mouse.get_pos()[0] <= self.current_coords[0] + self.bird_radius and self.current_coords[1] - self.bird_radius <= pygame.mouse.get_pos()[1] <= self.current_coords[1] + self.bird_radius:
                 self.bird_held = True
         elif event.type == pygame.MOUSEBUTTONUP:
-            self.bird_held = False
-            self.current_coords = self.original_coords.copy()
-            self.bird_flying = True
-            self.start_time = pygame.time.get_ticks() / 1000
-            self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
-            self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
+            if self.bird_held:
+                self.bird_held = False
+                self.bird_flying = True
+                self.start_time = pygame.time.get_ticks() / 1000
+                self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
+                self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
 
     def update(self):
         if self.bird_held:
@@ -80,20 +79,21 @@ class Bird:
             self.u = self.elasticity * np.linalg.norm([new_vx, new_vy])
             self.angle = np.arctan2(new_vy, new_vx)
             self.original_coords[0] = 800 - self.bird_radius
+            self.current_coords[0] = self.original_coords[0]
         else:
             new_vx = self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vy, new_vx])
             self.angle = np.arctan2(new_vy, new_vx)
             self.current_coords[1] = 400 - self.bird_radius - 1
+            self.original_coords[1] = self.current_coords[1]
 
-        self.original_coords = self.current_coords.copy()
         self.start_time = pygame.time.get_ticks() / 1000
 
     def draw_projection(self):
         if self.bird_held:
             points = []
-            for i in range(1,500):
+            for i in range(1, 101):
                 t = i * 0.1  # Incremental time for projection
                 x = self.xcord(self.u, self.angle, t)
                 y = self.ycord(self.u, self.angle, t)
