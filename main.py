@@ -16,7 +16,7 @@ u=0
 angle=0
 
 t=0
-time_factor=20 #to speed up the simulation
+time_factor=50 #to speed up the simulation
 def velocity_finder(xi):
     return elastic_constant*xi       #how much you pull it back->x
 def xcord(u,s,t):                                   #u and s are the speeds and the angles
