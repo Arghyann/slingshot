@@ -38,7 +38,7 @@ def draw_projection():
         
     points = []
     drawtime=pygame.time.get_ticks() / 1000
-    for i in range(1,500):
+    for i in range(1,50):
                 z = ((pygame.time.get_ticks() / 1000)-drawtime)*time_factor*i  # Incremental time for projection
                 print(u,angle)
                 x = xcord(u, angle, z)
