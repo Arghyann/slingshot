@@ -68,6 +68,7 @@ class Bird:
                 self.handle_collision(horizontal=False)
 
     def handle_collision(self, horizontal):
+        t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
         if horizontal:
             new_vx = -self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
