@@ -24,6 +24,7 @@ def main():
 
         
         background.draw()
+        bird.reset()
         bird.update()
         bird.draw()
 

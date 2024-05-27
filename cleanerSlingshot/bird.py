@@ -72,7 +72,7 @@ class Bird:
 
     #updates the bird's position
     def update(self):
-        print("u", self.u)
+        #print("u", self.u)
         if self.bird_held:
             self.current_coords[0], self.current_coords[1] = pygame.mouse.get_pos()
             self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
@@ -87,9 +87,6 @@ class Bird:
             if self.current_coords[0] + self.bird_radius >= 800 or self.current_coords[1] + self.bird_radius >= 400:
                 self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
                 self.start_time = current_time
-        
-        if self.u == 0:
-            self.gameOver()
 
     #handles collision with wall or ground
     def handle_collision(self, wall):
@@ -138,6 +135,6 @@ class Bird:
         pygame.draw.circle(self.screen, (255, 0, 0), (int(self.current_coords[0]), int(self.current_coords[1])), self.bird_radius)
 
     #draws a button over a translucent background to restart the bird at the slingshot
-    def gameOver(self):
+    def reset(self):
         #pygame.draw.rect(self.screen, (125,125,125), (10,10,80,40), 1, 5)
         self.resetButton.draw()
