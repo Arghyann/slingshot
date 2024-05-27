@@ -22,7 +22,7 @@ class Bird:
         self.angle = 0
         self.start_time = 0
         self.time_factor = 20
-        self.min_velocity_threshold = 1  # Minimum velocity threshold to stop the bird
+        self.min_velocity_threshold = 10 # Minimum velocity threshold to stop the bird
 
         # Buttons
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
