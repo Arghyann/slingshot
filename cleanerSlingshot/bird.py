@@ -49,7 +49,7 @@ class Bird:
         return u * np.cos(s) * np.exp(-self.c * t)
 
     def vy(self, u, s, t):
-        return u * np.sin(s) * np.exp(-self.c * t) - self.g * t
+        return (((u * np.sin(s) *self.c)+self.g)* np.exp(-self.c * t) - self.g)/self.c
 
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
