@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from button import Button
+from background import Background
 
 class Bird:
     def __init__(self, screen, mass, elasticity, cair, g, k):
@@ -82,6 +83,13 @@ class Bird:
             if self.current_coords[0] + self.bird_radius >= 800 or self.current_coords[1] + self.bird_radius >= 400:
                 self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
                 self.start_time = current_time
+            
+            for obstacle in Background.obstacles:
+                if self.rect.colliderect(obstacle.rect):
+                    if obstacle.is_hit():
+                        Background.obstacles.remove(obstacle)
+                    self.handle_collision(wall=False)
+                    self.start_time = current_time
 
     def handle_collision(self, wall):
         t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor

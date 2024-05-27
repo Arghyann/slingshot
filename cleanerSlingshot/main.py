@@ -6,6 +6,7 @@
 import pygame
 from background import Background
 from bird import Bird
+from obstacles import Obstacle
 
 def main():
     pygame.init()
@@ -14,6 +15,11 @@ def main():
 
     background = Background(screen)
     bird = Bird(screen, mass=40, elasticity=1, cair=2, g=-20, k=2)
+
+    Background.obstacles = [
+        Obstacle(screen, x=400, y=300, width=50, height=50),
+        Obstacle(screen, x=500, y=300, width=50, height=50)
+    ]
 
     run = True
     while run:
@@ -27,6 +33,9 @@ def main():
         bird.reset()
         bird.update()
         bird.draw()
+
+        for obstacle in Background.obstacles:
+            obstacle.draw()
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
