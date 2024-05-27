@@ -3,7 +3,6 @@ import numpy as np
 from button import Button
 
 class Bird:
-    #init function consists of all parameters and attributes
     def __init__(self, screen, mass, elasticity, cair, g, k):
         self.screen = screen
         self.mass = mass
@@ -25,35 +24,32 @@ class Bird:
         self.time_factor = 20
         self.min_velocity_threshold = 1  # Minimum velocity threshold to stop the bird
 
-        #Buttons
+        # Buttons
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
+        
+        # Sounds
+        self.launch_sound = pygame.mixer.Sound("cleanerSlingshot/launch.mp3")
+        self.hit_sound = pygame.mixer.Sound("cleanerSlingshot/hit.mp3")
 
-    #calculates velocity based on how much the mouse is pulled
     def velocity_finder(self, x):
         return self.elastic_constant * x
-    
-    #calculates instantaneous x coordinate of the bird
+
     def xcord(self, u, s, t):
         return self.original_coords[0] + (u * np.cos(s) / self.c) * (1 - np.exp(-self.c * t))
-    
-    #calculates instantaneous y coordinate of the bird
+
     def ycord(self, u, s, t):
         term1 = u * np.sin(s) + self.g / self.c
         term2 = (u * np.sin(s) + self.g / self.c) * np.exp(-self.c * t)
         return self.original_coords[1] - ((term1 - term2) / self.c) - self.g * t / self.c
-    
-    #calculates instantaneous x velocity of the bird
+
     def vx(self, u, s, t):
         return u * np.cos(s) * np.exp(-self.c * t)
-    
-    #calculates instantaneous y velocity of the bird
+
     def vy(self, u, s, t):
         return u * np.sin(s) * np.exp(-self.c * t) - self.g * t
-    
-    #handles all events (mouse and keyboard)
+
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print("Mouse is clicked")
             if self.current_coords[0] - self.bird_radius <= pygame.mouse.get_pos()[0] <= self.current_coords[0] + self.bird_radius and self.current_coords[1] - self.bird_radius <= pygame.mouse.get_pos()[1] <= self.current_coords[1] + self.bird_radius:
                 self.bird_held = True
             elif self.resetButton.resetButtonCords(pygame.mouse.get_pos()):
@@ -69,10 +65,9 @@ class Bird:
                 self.start_time = pygame.time.get_ticks() / 1000
                 self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
                 self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
+                self.launch_sound.play()
 
-    #updates the bird's position
     def update(self):
-        #print("u", self.u)
         if self.bird_held:
             self.current_coords[0], self.current_coords[1] = pygame.mouse.get_pos()
             self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
@@ -88,7 +83,6 @@ class Bird:
                 self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
                 self.start_time = current_time
 
-    #handles collision with wall or ground
     def handle_collision(self, wall):
         t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
         if wall:
@@ -114,8 +108,8 @@ class Bird:
             self.u = 0
 
         self.start_time = pygame.time.get_ticks() / 1000
+        self.hit_sound.play()
 
-    #draws the bird's projection
     def draw_projection(self):
         if self.bird_held:
             points = []
@@ -129,12 +123,10 @@ class Bird:
             if len(points) > 1:
                 pygame.draw.lines(self.screen, (0, 0, 0), False, points, 1)
 
-    #draws the bird
     def draw(self):
         self.draw_projection()
         pygame.draw.circle(self.screen, (255, 0, 0), (int(self.current_coords[0]), int(self.current_coords[1])), self.bird_radius)
+        self.resetButton.draw()
 
-    #draws a button over a translucent background to restart the bird at the slingshot
     def reset(self):
-        #pygame.draw.rect(self.screen, (125,125,125), (10,10,80,40), 1, 5)
         self.resetButton.draw()
