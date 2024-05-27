@@ -25,6 +25,8 @@ class Bird:
         self.time_factor = 20
         self.min_velocity_threshold = 10 # Minimum velocity threshold to stop the bird
 
+        #self.rect = pygame.Rect(self.current_coords[0] - self.bird_radius, self.current_coords[1] - self.bird_radius, self.bird_radius * 2, self.bird_radius * 2)
+
         # Buttons
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
         
@@ -85,7 +87,7 @@ class Bird:
                 self.start_time = current_time
             
             for obstacle in Background.obstacles:
-                if self.rect.colliderect(obstacle.rect):
+                if obstacle.rect.collidepoint(self.current_coords) :
                     if obstacle.is_hit():
                         Background.obstacles.remove(obstacle)
                     self.handle_collision(wall=False)
