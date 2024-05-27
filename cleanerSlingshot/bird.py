@@ -89,9 +89,14 @@ class Bird:
             for obstacle in Background.obstacles:
                 if obstacle.rect.collidepoint(self.current_coords) :
                     if obstacle.is_hit():
+                        self.hit_sound.play()
                         Background.obstacles.remove(obstacle)
-                    self.handle_collision(wall=False)
-                    self.start_time = current_time
+                    #self.obstacle_collision(obstacle)
+                    #self.start_time = current_time
+
+    #def obstacle_collision(self, obstacle):
+    #    Background.obstacles.remove(obstacle)
+    #    self.hit_sound.play()
 
     def handle_collision(self, wall):
         t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
