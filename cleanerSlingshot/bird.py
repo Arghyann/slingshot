@@ -53,8 +53,15 @@ class Bird:
     #handles all events (mouse and keyboard)
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
+            print("Mouse is clicked")
             if self.current_coords[0] - self.bird_radius <= pygame.mouse.get_pos()[0] <= self.current_coords[0] + self.bird_radius and self.current_coords[1] - self.bird_radius <= pygame.mouse.get_pos()[1] <= self.current_coords[1] + self.bird_radius:
                 self.bird_held = True
+            elif self.resetButton.resetButtonCords(pygame.mouse.get_pos()):
+                self.bird_held = False
+                self.bird_flying = False
+                self.current_coords = np.array([111, 323])
+                self.original_coords = np.array([111, 323])
+                self.u = 0
         elif event.type == pygame.MOUSEBUTTONUP:
             if self.bird_held:
                 self.bird_held = False
@@ -62,12 +69,6 @@ class Bird:
                 self.start_time = pygame.time.get_ticks() / 1000
                 self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
                 self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
-        elif self.resetButton.is_clicked(event):
-            self.bird_held = False
-            self.bird_flying = False
-            self.current_coords = np.array([111, 323])
-            self.original_coords = np.array([111, 323])
-            self.u = 0
 
     #updates the bird's position
     def update(self):

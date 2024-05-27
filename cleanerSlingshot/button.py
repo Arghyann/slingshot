@@ -24,8 +24,12 @@ class Button:
         self.screen.blit(text_surf, text_rect)
 
     def is_clicked(self, event):
-        print("Button CLicked")
-        if event.type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(pygame.mouse.get_pos()):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print("Button Clicked")
             if self.rect.collidepoint(event.pos):
                 return True
         return False
+    
+    def resetButtonCords(self, pos):
+        return self.rect.collidepoint(pos)
+    
