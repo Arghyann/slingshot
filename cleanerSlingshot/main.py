@@ -22,9 +22,9 @@ def main():
                 run = False
             bird.handle_events(event)
 
-        bird.update()
         
         background.draw()
+        bird.update()
         bird.draw()
 
         pygame.display.flip()
