@@ -17,8 +17,9 @@ def main():
     bird = Bird(screen, mass=40, elasticity=1, cair=2, g=-20, k=2)
 
     Background.obstacles = [
-        Obstacle(screen, x=400, y=300, width=20, height=20),
-        Obstacle(screen, x=500, y=300, width=20, height=20)
+        Obstacle(screen, x=400, y=300, width=20, height=100),
+        Obstacle(screen, x=500, y=300, width=20, height=100),
+        Obstacle(screen, x=400, y=280, width=120, height=20),
     ]
 
     run = True
@@ -35,6 +36,7 @@ def main():
         bird.draw()
 
         for obstacle in Background.obstacles:
+            obstacle.falling()
             obstacle.draw()
 
         pygame.display.flip()
