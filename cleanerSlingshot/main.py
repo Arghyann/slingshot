@@ -15,7 +15,7 @@ def main():
     pygame.display.set_caption("Angry Birds Simulation")
 
     background = Background(1000,600)
-    bird = Bird(background.screen, background, mass=40, elasticity=1, cair=2, g=-20, k=2)
+    bird = Bird(background.screen, background, mass=40, elasticity=0.5, cair=2, g=-50, k=5)
 
     Obstacle(background.screen, background, x=400, y=300, width=20, height=100)
     Obstacle(background.screen, background, x=500, y=300, width=20, height=100)
