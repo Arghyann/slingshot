@@ -21,6 +21,7 @@ class Bird:
         self.angle = 0
         self.start_time = 0
         self.time_factor = 20
+        self.min_velocity_threshold = 1  # Minimum velocity threshold to stop the bird
 
     def velocity_finder(self, x):
         return self.elastic_constant * x
@@ -80,9 +81,15 @@ class Bird:
             new_vx = self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vy, new_vx])
-            self.angle = -np.arctan(new_vy / new_vx)
+            self.angle = np.arctan2(new_vy, new_vx)
             self.current_coords[1] = 400 - self.bird_radius - 1
             self.original_coords[1] = self.current_coords[1]
+            self.original_coords[0] = self.current_coords[0]
+
+        # Stop the bird if the velocity is too low
+        if self.u < self.min_velocity_threshold:
+            self.bird_flying = False
+            self.u = 0
 
         self.start_time = pygame.time.get_ticks() / 1000
 
