@@ -1,21 +1,19 @@
 import pygame
 
-from background import Background
-
-class Obstacle:
-    def __init__(self, screen, backgroundInstance, x, y, width, height, color=(139,69,19), durability=1):
+class Piglin:
+    def __init__(self, screen, backgroundInstance, x, y, side, color=(139,69,19), durability=1):
         self.screen = screen
         self.background = backgroundInstance
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
-        self.rect = pygame.Rect(self.x, self.y, width, height)
+        self.width = side
+        self.height = side
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.color = color
         self.durability = durability
 
         #add to background i.e. god
-        self.background.obstacles.append(self)
+        self.background.piglins.append(self)
 
     #code of the obstacle to naturally fall to the ground (call it directly in main.py)
     def falling(self):

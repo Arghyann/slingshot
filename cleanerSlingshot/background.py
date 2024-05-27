@@ -3,9 +3,8 @@ import pygame
 class Background:
     def __init__(self, screen):
         self.screen = screen
-
-        #obstacles array
         self.obstacles = []
+        self.piglins = []
 
     def draw(self):
         self.screen.fill((255, 255, 255))

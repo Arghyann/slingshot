@@ -4,6 +4,7 @@
 
 
 import pygame
+from piglins import Piglin
 from background import Background
 from bird import Bird
 from obstacles import Obstacle
@@ -14,13 +15,15 @@ def main():
     pygame.display.set_caption("Angry Birds Simulation")
 
     background = Background(screen)
-    bird = Bird(screen, mass=40, elasticity=1, cair=2, g=-20, k=2)
+    bird = Bird(screen, background, mass=40, elasticity=1, cair=2, g=-20, k=2)
 
-    Background.obstacles = [
-        Obstacle(screen, x=400, y=300, width=20, height=100),
-        Obstacle(screen, x=500, y=300, width=20, height=100),
-        Obstacle(screen, x=400, y=280, width=120, height=20),
-    ]
+    Obstacle(screen, background, x=400, y=300, width=20, height=100)
+    Obstacle(screen, background, x=500, y=300, width=20, height=100)
+    Obstacle(screen, background, x=400, y=280, width=120, height=20)
+
+    Piglin(screen, background, x=430, y=240, side=40)
+
+
 
     run = True
     while run:
@@ -35,9 +38,13 @@ def main():
         bird.update()
         bird.draw()
 
-        for obstacle in Background.obstacles:
+        for obstacle in background.obstacles:
             obstacle.falling()
             obstacle.draw()
+
+        for piglin in background.piglins:
+            piglin.falling()
+            piglin.draw()
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)

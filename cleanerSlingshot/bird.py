@@ -4,8 +4,9 @@ from button import Button
 from background import Background
 
 class Bird:
-    def __init__(self, screen, mass, elasticity, cair, g, k):
+    def __init__(self, screen, backgroundInstance, mass, elasticity, cair, g, k):
         self.screen = screen
+        self.background = backgroundInstance
         self.mass = mass
         self.elasticity = elasticity
         self.cair = cair
@@ -31,8 +32,8 @@ class Bird:
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
         
         # Sounds
-        self.launch_sound = pygame.mixer.Sound("cleanerSlingshot/launch.mp3")
-        self.hit_sound = pygame.mixer.Sound("cleanerSlingshot/hit.mp3")
+        self.launch_sound = pygame.mixer.Sound("ProjectileSimulation/angryBirds/cleanerSlingshot/launch.mp3")
+        self.hit_sound = pygame.mixer.Sound("ProjectileSimulation/angryBirds/cleanerSlingshot/hit.mp3")
 
     def velocity_finder(self, x):
         return self.elastic_constant * x
@@ -49,7 +50,7 @@ class Bird:
         return u * np.cos(s) * np.exp(-self.c * t)
 
     def vy(self, u, s, t):
-        return (((u * np.sin(s) *self.c)+self.g)* np.exp(-self.c * t) - self.g)/self.c
+        return u * np.sin(s) * np.exp(-self.c * t) - self.g * t
 
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -86,11 +87,11 @@ class Bird:
                 self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
                 self.start_time = current_time
             
-            for obstacle in Background.obstacles:
+            for obstacle in self.background.obstacles:
                 if obstacle.rect.collidepoint(self.current_coords) :
                     if obstacle.is_hit():
                         self.hit_sound.play()
-                        Background.obstacles.remove(obstacle)
+                        self.background.obstacles.remove(obstacle)
                     #self.obstacle_collision(obstacle)
                     #self.start_time = current_time
 
