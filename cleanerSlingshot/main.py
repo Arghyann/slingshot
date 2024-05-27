@@ -1,3 +1,8 @@
+#Created MVP 1.0
+
+
+
+
 import pygame
 from background import Background
 from bird import Bird
