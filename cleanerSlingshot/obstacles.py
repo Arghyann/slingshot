@@ -1,6 +1,6 @@
 import pygame
 
-from background import Background
+
 
 class Obstacle:
     def __init__(self, screen, backgroundInstance, x, y, width, height, color=(139,69,19), durability=1):
@@ -20,7 +20,7 @@ class Obstacle:
     #code of the obstacle to naturally fall to the ground (call it directly in main.py)
     def falling(self):
         # Check if the obstacle is above the ground
-        if self.rect.bottom < 400:
+        if self.rect.bottom < self.background.grassY:
             # Check if there is an obstacle below
             for entity in self.background.obstacles+self.background.piglins:
                 if entity != self:

@@ -32,8 +32,8 @@ class Bird:
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
         
         # Sounds
-        self.launch_sound = pygame.mixer.Sound("ProjectileSimulation/angryBirds/cleanerSlingshot/launch.mp3")
-        self.hit_sound = pygame.mixer.Sound("ProjectileSimulation/angryBirds/cleanerSlingshot/hit.mp3")
+        self.launch_sound = pygame.mixer.Sound("cleanerSlingshot/launch.mp3")
+        self.hit_sound = pygame.mixer.Sound("cleanerSlingshot/hit.mp3")
 
     def velocity_finder(self, x):
         return self.elastic_constant * x
@@ -84,8 +84,8 @@ class Bird:
             self.current_coords[0] = self.xcord(self.u, self.angle, t)
             self.current_coords[1] = self.ycord(self.u, self.angle, t)
 
-            if self.current_coords[0] + self.bird_radius >= 800 or self.current_coords[1] + self.bird_radius >= 400:
-                self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
+            if self.current_coords[0] + self.bird_radius >= self.background.x or self.current_coords[1] + self.bird_radius >= self.background.grassY:
+                self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= self.background.x)
                 self.start_time = current_time
             
             for obstacle in self.background.obstacles:
@@ -107,14 +107,14 @@ class Bird:
             new_vy = self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vx, new_vy])
             self.angle = np.arctan2(new_vy, new_vx)
-            self.original_coords = [800 - self.bird_radius, self.current_coords[1]]
+            self.original_coords = [self.background.x - self.bird_radius, self.current_coords[1]]
             self.current_coords[0] = self.original_coords[0]
         else:
             new_vx = self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vy, new_vx])
             self.angle = np.arctan2(new_vy, new_vx)
-            self.current_coords[1] = 400 - self.bird_radius - 1
+            self.current_coords[1] = self.background.grassY - self.bird_radius - 1
             self.original_coords[1] = self.current_coords[1]
             self.original_coords[0] = self.current_coords[0]
 
@@ -134,7 +134,7 @@ class Bird:
                 t = i * 0.1  # Incremental time for projection
                 x = self.xcord(self.u, self.angle, t)
                 y = self.ycord(self.u, self.angle, t)
-                if x > 800 or y > 600:
+                if x > self.background.x or y > 600:
                     break
                 points.append((int(x), int(y)))
             if len(points) > 1:

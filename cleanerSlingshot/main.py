@@ -11,17 +11,17 @@ from obstacles import Obstacle
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    
     pygame.display.set_caption("Angry Birds Simulation")
 
-    background = Background(screen)
-    bird = Bird(screen, background, mass=40, elasticity=1, cair=2, g=-20, k=2)
+    background = Background(1000,600)
+    bird = Bird(background.screen, background, mass=40, elasticity=1, cair=2, g=-20, k=2)
 
-    Obstacle(screen, background, x=400, y=300, width=20, height=100)
-    Obstacle(screen, background, x=500, y=300, width=20, height=100)
-    Obstacle(screen, background, x=400, y=280, width=120, height=20)
+    Obstacle(background.screen, background, x=400, y=300, width=20, height=100)
+    Obstacle(background.screen, background, x=500, y=300, width=20, height=100)
+    Obstacle(background.screen, background, x=400, y=280, width=120, height=20)
 
-    Piglin(screen, background, x=430, y=240, side=40)
+    Piglin(background.screen, background, x=430, y=240, side=40)
 
 
 
