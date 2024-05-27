@@ -64,23 +64,23 @@ class Bird:
             self.current_coords[1] = self.ycord(self.u, self.angle, t)
 
             if self.current_coords[0] + self.bird_radius >= 800 or self.current_coords[1] + self.bird_radius >= 400:
-                self.handle_collision(horizontal=self.current_coords[0] + self.bird_radius >= 800)
+                self.handle_collision(wall=self.current_coords[0] + self.bird_radius >= 800)
                 self.start_time = current_time
 
-    def handle_collision(self, horizontal):
+    def handle_collision(self, wall):
         t = ((pygame.time.get_ticks() / 1000) - self.start_time) * self.time_factor
-        if horizontal:
+        if wall:
             new_vx = -self.vx(self.u, self.angle, t)
             new_vy = self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vx, new_vy])
             self.angle = np.arctan2(new_vy, new_vx)
-            self.original_coords[0] = 800 - self.bird_radius
+            self.original_coords = [800 - self.bird_radius, self.current_coords[1]]
             self.current_coords[0] = self.original_coords[0]
         else:
             new_vx = self.vx(self.u, self.angle, t)
             new_vy = -self.vy(self.u, self.angle, t)
             self.u = self.elasticity * np.linalg.norm([new_vy, new_vx])
-            self.angle = np.arctan2(new_vy, new_vx)
+            self.angle = -np.arctan(new_vy / new_vx)
             self.current_coords[1] = 400 - self.bird_radius - 1
             self.original_coords[1] = self.current_coords[1]
 
