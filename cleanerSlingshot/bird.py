@@ -144,10 +144,37 @@ class Bird:
             if len(points) > 1:
                 pygame.draw.lines(self.screen, (0, 0, 0), False, points, 1)
 
+    #def draw(self):
+    #    self.draw_projection()
+    #    pygame.draw.circle(self.screen, (255, 0, 0), (int(self.current_coords[0]), int(self.current_coords[1])), self.bird_radius)
+    #    self.resetButton.draw()
+
     def draw(self):
         self.draw_projection()
-        pygame.draw.circle(self.screen, (255, 0, 0), (int(self.current_coords[0]), int(self.current_coords[1])), self.bird_radius)
-        self.resetButton.draw()
 
+        bird_image = pygame.Surface((self.bird_radius * 2, self.bird_radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(bird_image, (255, 0, 0), (self.bird_radius, self.bird_radius), self.bird_radius)
+        
+        # Draw eyes
+        eye_radius = 3
+        eye_x_offset = 5
+        eye_y_offset = 5
+        pygame.draw.circle(bird_image, (255, 255, 255), (self.bird_radius - eye_x_offset, self.bird_radius - eye_y_offset), eye_radius)
+        pygame.draw.circle(bird_image, (255, 255, 255), (self.bird_radius + eye_x_offset, self.bird_radius - eye_y_offset), eye_radius)
+        pygame.draw.circle(bird_image, (0, 0, 0), (self.bird_radius - eye_x_offset, self.bird_radius - eye_y_offset), 1)
+        pygame.draw.circle(bird_image, (0, 0, 0), (self.bird_radius + eye_x_offset, self.bird_radius - eye_y_offset), 1)
+        
+        # Draw mouth
+        mouth_start = (self.bird_radius - 5, self.bird_radius + 5)
+        mouth_end = (self.bird_radius + 5, self.bird_radius + 5)
+        pygame.draw.line(bird_image, (0, 0, 0), mouth_start, mouth_end, 2)
+        
+        if self.bird_flying:
+            bird_image = pygame.transform.rotate(bird_image, -np.degrees(self.angle))
+        
+        rect = bird_image.get_rect(center=(int(self.current_coords[0]), int(self.current_coords[1])))
+        self.screen.blit(bird_image, rect.topleft)
+        self.resetButton.draw()
+        
     def reset(self):
         self.resetButton.draw()
