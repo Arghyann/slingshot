@@ -95,7 +95,11 @@ class Bird:
                         self.background.obstacles.remove(obstacle)
                     #self.obstacle_collision(obstacle)
                     #self.start_time = current_time
-
+            for obstacle in self.background.piglins:
+                if obstacle.rect.collidepoint(self.current_coords) :
+                    if obstacle.is_hit():
+                        self.hit_sound.play()
+                        self.background.piglins.remove(obstacle)
     #def obstacle_collision(self, obstacle):
     #    Background.obstacles.remove(obstacle)
     #    self.hit_sound.play()
