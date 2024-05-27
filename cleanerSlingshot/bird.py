@@ -1,5 +1,6 @@
 import pygame
 import numpy as np
+from button import Button
 
 class Bird:
     #init function consists of all parameters and attributes
@@ -23,6 +24,9 @@ class Bird:
         self.start_time = 0
         self.time_factor = 20
         self.min_velocity_threshold = 1  # Minimum velocity threshold to stop the bird
+
+        #Buttons
+        self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
 
     #calculates velocity based on how much the mouse is pulled
     def velocity_finder(self, x):
@@ -58,6 +62,12 @@ class Bird:
                 self.start_time = pygame.time.get_ticks() / 1000
                 self.u = self.velocity_finder(np.linalg.norm(self.original_coords - self.current_coords))
                 self.angle = -np.arctan2(self.original_coords[1] - self.current_coords[1], self.original_coords[0] - self.current_coords[0])
+        elif self.resetButton.is_clicked(event):
+            self.bird_held = False
+            self.bird_flying = False
+            self.current_coords = np.array([111, 323])
+            self.original_coords = np.array([111, 323])
+            self.u = 0
 
     #updates the bird's position
     def update(self):
@@ -128,5 +138,5 @@ class Bird:
 
     #draws a button over a translucent background to restart the bird at the slingshot
     def gameOver(self):
-        pygame.draw.rect(self.screen, (125,125,125), (10,10,80,40), 1, 5)
-        
+        #pygame.draw.rect(self.screen, (125,125,125), (10,10,80,40), 1, 5)
+        self.resetButton.draw()
