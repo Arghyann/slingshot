@@ -32,8 +32,8 @@ class Bird:
         self.resetButton = Button(self.screen, x=0, y=0, width=80, height=40, text="Restart", color=(125,125,125), hover_color=(255,255,255), text_color=(0,0,0))
         
         # Sounds
-        self.launch_sound = pygame.mixer.Sound("cleanerSlingshot/launch.mp3")
-        self.hit_sound = pygame.mixer.Sound("cleanerSlingshot/hit.mp3")
+        self.launch_sound = pygame.mixer.Sound(r"D:\emulating physics\slingshot\cleanerSlingshot\launch.mp3")
+        self.hit_sound = pygame.mixer.Sound(r"D:\emulating physics\slingshot\cleanerSlingshot\hit.mp3")
 
     def velocity_finder(self, x):
         return self.elastic_constant * x
